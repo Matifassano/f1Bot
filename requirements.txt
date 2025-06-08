@@ -1,0 +1,23 @@
+# --- Manejo de datos y análisis
+pandas
+numpy
+
+# --- Visualización
+matplotlib
+seaborn
+
+# --- FastF1 para obtener datos de F1
+fastf1
+
+# --- Base de datos relacional (SQL Server)
+pyodbc
+sqlalchemy
+
+# --- LLM local vía REST (Ollama)
+requests
+
+# --- Telegram Bot
+python-telegram-bot==20.6
+
+# --- Logs, utilidades
+python-dotenv
