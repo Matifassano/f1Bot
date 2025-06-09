@@ -130,11 +130,11 @@ python bot/botHandler.py
 ## 📊 Ejemplos de Salida
 ### Ejemplos de Gráfico Generado
 
-![Ejemplo de análisis de posiciones](https://via.placeholder.com/800x400/1E1E1E/FFFFFF?text=Race+Position+Changes+-+COL+Las+Vegas+2024)
+![Gráfico de Colapinto](data/media/race_positions_changes_COL_Barcelona_2025.png)
 
 *Gráfico que muestra la evolución de posiciones durante la carrera*
 
-![Ejemplo de tiempos por vuelta](https://via.placeholder.com/800x600/1E1E1E/FFFFFF?text=Lap+Times+Analysis+-+COL+Las+Vegas+2024)
+![Ejemplo de tiempos por vuelta](data/media/race_laps_times_COL_Barcelona_2025.png)
 
 *Análisis de tiempos por vuelta con identificación de compounds*
 
