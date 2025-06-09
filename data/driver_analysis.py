@@ -19,12 +19,8 @@ fastf1.plotting.setup_mpl(mpl_timedelta_support=True, misc_mpl_mods=False, color
 
 driver_number = '43'
 driver_name = 'COL'
-team_name = ["Alpine", "Williams"]
-teammates_names = ["GAS", "ALB"]
-teammates_numbers = ["10", "23"]
 
 conn, cursor = get_db_connection()
-
 
 ## Get the event data from the database
 def get_event_data(year, track, driver):
@@ -49,7 +45,8 @@ def race_positions_changes(year, track, driverNum): ##Driver Number
         graph_data = get_graph_data(event_data[0][0], 'race_positions_changes')
         if graph_data:
             print(f"Graph (race_positions_changes) already exists for {driver_name} in {year} {track}")
-            return graph_data[0]
+            print(f"Graph ID: {graph_data[0][0]}")
+            return graph_data[0][0]
         else:
             print(f"Event exists but graph (race_positions_changes) does not exist, creating graph...")
             event_id = event_data[0][0]  # Usar el event_id existente
@@ -105,6 +102,7 @@ def race_positions_changes(year, track, driverNum): ##Driver Number
     plt.savefig(filepath)
     plt.close(fig)
     print(f"Graph (race_positions_changes) created for {driver_name} in {year} {track}")
+    print(f"Graph ID: {graph_id}")
     return graph_id
         
 
@@ -115,7 +113,8 @@ def race_laps_times(year, track, driver): ##Driver name
         graph_data = get_graph_data(event_data[0][0], 'race_laps_times')
         if graph_data:
             print(f"Graph (race_laps_times) already exists for {driver} in {year} {track}")
-            return graph_data[0]
+            print(f"Graph ID: {graph_data[0][0]}")
+            return graph_data[0][0]
         else:
             print(f"Event exists but graph (race_laps_times) does not exist, creating graph...")
             event_id = event_data[0][0]
@@ -168,7 +167,6 @@ def race_laps_times(year, track, driver): ##Driver name
     ax.invert_yaxis()
     plt.suptitle(f"{driver} Laptimes in the {year} {track} Grand Prix")
 
-    # Turn on major grid lines
     plt.grid(color='w', which='major', axis='both')
     sns.despine(left=True, bottom=True)
 
@@ -177,7 +175,6 @@ def race_laps_times(year, track, driver): ##Driver name
     filepath = os.path.join(script_dir, "media", filename)
     description = f"{driver} driver lap times in the {year} {track} Grand Prix"
 
-    # Solo insertar evento si no existe
     if not event_data:
         query = """
         INSERT INTO EventF1 (season, gp, driver) 
@@ -202,69 +199,14 @@ def race_laps_times(year, track, driver): ##Driver name
     print(f"Graph (race_laps_times) created for {driver} in {year} {track}")
     return graph_id
 
-##def time_race_pace(year, track):
-
-    event_data = get_event_data(year, track, driver)
-    if event_data:
-        graph_data = get_graph_data(event_data[0][0], 'time_race_pace')
-        if graph_data:
-            print(f"Graph (time_race_pace) already exists for {driver} in {year} {track}")
-            return graph_data[0]
-        else:
-            print(f"Event exists but graph (time_race_pace) does not exist, creating graph...")
-            event_id = event_data[0][0]
-
-    print(f"Event does not exist for {driver} in {year} {track}, creating event...")
-    race = fastf1.get_session(year, track, 'R')
-    race.load()
-    laps = race.laps.pick_quicklaps()
-
-    transformed_laps = laps.copy()
-    transformed_laps.loc[:, "LapTime (s)"] = laps["LapTime"].dt.total_seconds()
-
-    # order the team from the fastest (lowest median lap time) tp slower
-    team_order = (
-        transformed_laps[["Team", "LapTime (s)"]]
-        .groupby("Team")
-        .median()["LapTime (s)"]
-        .sort_values()
-        .index
-    )
-    print(team_order)
-
-    # make a color palette associating team names to hex codes
-    team_palette = {team: fastf1.plotting.get_team_color(team, session=race)
-                    for team in team_order}
-
-    fig, ax = plt.subplots(figsize=(10, 5))
-    sns.boxplot(
-        data=transformed_laps,
-        x="Team",
-        y="LapTime (s)",
-        hue="Team",
-        order=team_order,
-        palette=team_palette,
-        whiskerprops=dict(color="white"),
-        boxprops=dict(edgecolor="white"),
-        medianprops=dict(color="grey"),
-        capprops=dict(color="white"),
-    )
-
-    plt.title(f"{year} {track} Grand Prix")
-    plt.grid(visible=False)
-
-    # x-label is redundant
-    ax.set(xlabel=None)
-    plt.tight_layout()
-    plt.show()
-
 def race_laptimes_distribution(year, track, driverNum): ##Driver number
     event_data = get_event_data(year, track, driver_name)
     if event_data:
         graph_data = get_graph_data(event_data[0][0], 'race_laptimes_distribution')
         if graph_data:
             print(f"Graph (race_laptimes_distribution) already exists for {driver_name} in {year} {track}")
-            return graph_data[0]
+            print(f"Graph ID: {graph_data[0][0]}")
+            return graph_data[0][0]
         else:
             print(f"Event exists but graph (race_laptimes_distribution) does not exist, creating graph...")
             event_id = event_data[0][0]
@@ -342,13 +284,15 @@ def race_laptimes_distribution(year, track, driverNum): ##Driver number
     print(f"Graph (race_laptimes_distribution) created for {driver_name} in {year} {track}")
     return graph_id
 
+
 def qualy_results(year, track, driver): ##Driver name
     event_data = get_event_data(year, track, driver)
     if event_data:
         graph_data = get_graph_data(event_data[0][0], 'qualy_results')
         if graph_data:
             print(f"Graph (qualy_results) already exists for {driver} in {year} {track}")
-            return graph_data[0]
+            print(f"Graph ID: {graph_data[0][0]}")
+            return graph_data[0][0]
         else:
             print(f"Event exists but graph (qualy_results) does not exist, creating graph...")
             event_id = event_data[0][0]
@@ -364,7 +308,7 @@ def qualy_results(year, track, driver): ##Driver name
     list_fastest_laps = list()
     for drv in drivers:
         drvs_fastest_lap = session.laps.pick_drivers(drv).pick_fastest()
-        if drvs_fastest_lap is not None:  # ✅ Solo agregar si no es None
+        if drvs_fastest_lap is not None:
             list_fastest_laps.append(drvs_fastest_lap)
 
     fastest_laps = Laps(list_fastest_laps) \
@@ -432,8 +376,16 @@ def qualy_results(year, track, driver): ##Driver name
     print(f"Graph (qualy_results) created for {driver} in {year} {track}")
     return graph_id
 
+def get_full_analysis(year, track, driverName, driverNumber):
+    race_positions_changes(year, track, driverNumber)
+    race_laps_times(year, track, driverName)
+    race_laptimes_distribution(year, track, driverNumber)
+    qualy_results(year, track, driverName)
+
 ##race_positions_changes(2025, 'Monaco', driver_number)
 ##race_laps_times(2025, 'Monaco', driver_name)
 ## time_race_pace(2025, 'Monaco')
 ##race_laptimes_distribution(2025, 'Monaco', driver_number)
-qualy_results(2025, 'Imola', driver_name)
+## qualy_results(2025, 'Imola', driver_name)
+
+## get_full_analysis(2025, 'Monaco', driver_name, driver_number)

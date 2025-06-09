@@ -13,11 +13,12 @@ fastf1
 pyodbc
 sqlalchemy
 
-# --- LLM local vía REST (Ollama)
+# --- LLM local
 requests
+Ollama
 
 # --- Telegram Bot
-python-telegram-bot==20.6
+python-telegram-bot
 
 # --- Logs, utilidades
 python-dotenv
